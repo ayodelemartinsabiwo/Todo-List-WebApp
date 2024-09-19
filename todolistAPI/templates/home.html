@@ -1,0 +1,149 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ToDoList</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="/static/todolist_icon.svg" type="image/svg+xml">
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <style>
+        body {
+
+            font-family:Roboto,'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-size: 12px;
+            color: rgb(109, 112, 112);
+            font-weight: 400;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0px;
+            position: relative; /* Needed for absolute positioning of pseudo-element */
+
+
+        }
+
+        body:before {
+            content: "";
+            background-image: url('/static/todoab1.jpg');
+            background-size: 180em;
+            background-repeat: no-repeat;
+            background-position: -16em; /* Adjust positioning if needed */
+            opacity: 0.8; /* Set desired opacity here */
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: -1px;
+            z-index: -1; /* Place behind content */
+        }
+
+        section {
+            background-color: rgba(248, 247, 247, 0.976);
+            border: solid 4px rgba(245, 245, 245, 0.979);
+            padding: 50px;
+            font-weight: 400;
+            text-align: center;
+            border-radius: 70px;
+            width: 100%;
+
+        }
+
+
+        p {
+            font-size: 20px;
+            font-weight: 300;
+            margin-top: 0px;
+        }
+
+        h1 {
+            margin: 5px;
+        }
+
+        span a {
+
+            text-decoration: none;
+            font-size: 16px;
+            color: cadetblue;
+        }
+
+        a:hover {
+            color: rgb(231, 17, 131);
+        }
+
+        #st {
+            font-size: 20px;
+            padding-right: 10px ;
+            padding-left: 10px ;
+            color: cadetblue;
+        }
+
+        #sp {
+            margin-top: 15px;
+
+        }
+
+        #img img { /* Target the inner image for specificity */
+            transition: transform 0.6s ease-out; /* Smooth animation */
+        }
+
+        #img:hover img { /* Apply styles on hover */
+            transform: scale(1.08); /* Increase size by 20% */
+        }
+
+
+        @media (max-width: 600px){
+            section {
+            padding: 10px;
+            text-align: center;
+            border-radius: 40px;
+            margin: 20px;
+            margin: 0px;
+
+        }
+
+
+
+        img {
+            max-width: 270px;
+        }
+
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6" >
+                <section>
+                    <h1>ToDoList</h1>
+                    <p>To do listing at its best!</p>
+                    <div id="img">
+                        <img src="{% static 'todolist_icon.svg' %}" style="width: 300px;" alt="To Do List Icon">
+                    </div>
+                    <article id="sp">
+                        <span><a href="{% url 'join' %}" target="_blank">Join to share</a></span>
+                        <span id="st">|</span>
+                        <span><a href="{% url 'login' %}" target="_blank">Login</a></span>
+                    </article>
+
+                </section>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

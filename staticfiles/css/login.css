@@ -1,0 +1,27 @@
+body{
+    font-family:Roboto,'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: rgb(109, 112, 112);
+    font-weight: 400;
+    font-size: 1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0px;
+    position: relative; /* Needed for absolute positioning of pseudo-element */
+}
+
+section{
+    border: solid 1px rgb(239, 239, 239);
+    padding: 50px;
+    padding-top: 70px;
+    padding-bottom: 70px;
+    border-radius: 50px;
+    background-color: rgb(249, 249, 249);
+    text-align: center;
+    width: auto; /*By using width, the other content won't determine the width of the section tag e.g text size..*/
+}
+
+form{
+    text-align: left;
+}

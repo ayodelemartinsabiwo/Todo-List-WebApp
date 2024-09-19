@@ -1,0 +1,259 @@
+{% load static %}
+{% load bootstrap4 %}
+
+{# Display a form #}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="/static/todolist_icon.svg" type="image/svg+xml">
+
+    <style>
+        body {
+
+            font-family:Roboto,'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            color: rgb(109, 112, 112);
+            font-weight: 400;
+            font-size: 1px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0px;
+            position: relative; /* Needed for absolute positioning of pseudo-element */
+
+
+        }
+
+        body:before {
+            content: "";
+            background-image: url('/static/todoab1.jpg');
+            background-size: 140em;
+            background-repeat: no-repeat;
+            background-position: -14em; /* Adjust positioning if needed */
+            opacity: 0.8; /* Set desired opacity here */
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: -1px;
+            z-index: -1; /* Place behind content */
+        }
+
+        section {
+            background-color: rgba(255, 255, 255, 0.854);
+            border: solid 4px rgba(255, 254, 254, 0.979);
+            margin: 5px;
+            padding: 40px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            text-align: center;
+            border-radius: 70px;
+            width: auto;
+        }
+
+
+        #username-tick,
+        #username-cancel {
+            display: none;
+            font-size: 1.5em;
+            position: absolute;
+            right: 15%;
+            top: 50%;
+            transform: translateY(-370%);
+
+        }
+
+        #username-tick {
+            font-size: 2.0em;
+            color: rgb(15, 199, 15); /* Green color */
+        }
+
+        #username-cancel {
+            color: red;
+            transform: translateY(-490%);
+
+        }
+
+
+
+        p {
+            font-size: 19px;
+            font-weight: 300;
+            margin-top: 0px;
+        }
+
+        h1 {
+            margin: 5px;
+        }
+
+        span{
+
+            text-decoration: none;
+            font-size: 4px;
+
+        }
+
+        a:hover {
+            color: rgb(231, 17, 131);
+        }
+
+        #sp {
+            margin-top: 15px;
+
+        }
+
+        #fm{
+            position: relative;
+            text-align: left;
+            margin: 20px auto;
+            padding: 40px;
+            border: 1px solid #ddd;
+            border-radius: 40px;
+        }
+        form#fm label{
+            font-size: 17px;
+            display: block;
+            margin-bottom: 1px;
+            font-weight: 300;
+        }
+
+        form#fm ul{
+            font-size: 10px;
+        }
+
+        form#fm small{
+            font-size: 12px;
+        }
+
+        button{
+            width: 70px;
+
+        }
+
+        @media (max-width: 991px){
+            section{
+                margin: auto;
+            }
+
+            #username-tick,
+        #username-cancel {
+            display: none;
+            font-size: 1.5em;
+            position: absolute;
+            right: 15%;
+            top: 50%;
+            transform: translateY(-400%);
+
+        }
+
+        #username-tick {
+            font-size: 2.0em;
+            color: rgb(15, 199, 15); /* Green color */
+        }
+
+        #username-cancel {
+            color: red;
+            transform: translateY(-530%);
+
+        }
+
+        }
+
+    </style>
+
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-7">
+                <section>
+                    <h1><img src="{% static 'todolist_icon.svg' %}"  style="width: 40px; margin-right: 10px; margin-bottom: 8px;">ToDoList</h1>
+                    <p>Join For Free</p>
+
+                    {% if forms.errors %}
+                    <p style="color: red;">There are errors in your form.</p>
+                    {% endif %}
+
+                    <form method="post" id="fm" class="form">
+                        {% csrf_token %}
+                        {% bootstrap_form form %}
+                        {% buttons %}
+                        <button type="submit" class="btn btn-primary" style="background-color: rgb(7, 176, 168);">Join</button>
+                        {% endbuttons %}
+                        <!-- Adding a span element for the tick mark -->
+                        <!-- Add the tick and cancel symbols within the form -->
+                        <span id="username-tick" >🗸</span>
+                        <span id="username-cancel">✘</span>
+                    </form>
+
+                    <article id="sp">
+                        <p>To do listing made fun 🎉</p>
+                    </article>
+
+
+
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script>
+                        $(document).ready(function() {
+                            $('#id_username').on('input', function(){
+                                var username = $(this).val();
+                                console.log('Username input:', username); // Debugging: log the username input
+                                if (username.trim() === '') { // Check if username is empty or contains only whitespace
+                                    $('#username-tick').fadeOut(); // Hide the tick mark
+                                    $('#username-cancel').fadeOut(); // Hide the cancel mark
+                                    return; // Exit the function
+                                }
+                                $.ajax({
+                                    url: '{% url "check_username" %}',
+                                    data: {
+                                        'username': username
+                                    },
+                                    dataType: 'json',
+                                    success: function(data) {
+                                        console.log('AJAX success:', data); // Debugging: log the response data
+                                        if (data.exists) {
+                                            $('#username-tick').fadeOut(); // Hide the tick mark if username exists or use .hide()
+                                            $('#username-cancel').fadeIn(); // Show the cancel mark if username exists or .show() for instant appearance
+                                            //$('#id_username').css('border-color', 'red');
+                                        } else {
+                                            $('#username-cancel').fadeOut(); // Hide the cancel mark if username does not exist
+                                            $('#username-tick').fadeIn(); // Show the tick mark if username does not exist
+                                            //$('#id_username').css('border-color', 'green');
+                                        }
+                                    },
+                                    error: function(xhr, status, error) {
+                                        console.error('AJAX error:', status, error); // Debugging: log any errors
+                                    }
+                                });
+                            });
+                        }
+                        );
+                    </script>
+                    <!-- Add a redirect to the login page after signing up
+                    <script>
+                        $(document).ready(function() {
+                            $('#fm').submit(function() {
+                                // Redirect to login page after signing up
+                                window.location.href = '{% url "login" %}';
+                                return false;
+                            });
+                        });
+                    </script> -->
+
+                </section>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+  </html>

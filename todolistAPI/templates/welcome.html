@@ -1,0 +1,518 @@
+{% load static %}
+{% load bootstrap4 %}
+
+{# Display a form #}
+<!--Find solution to the toggled important-items not working-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ request.user.username }}</title>
+    <link rel="icon" href="/static/todolist_icon.svg" type="image/svg+xml">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">-->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        function confirmDelete(event) {
+            if (!confirm("Are you sure you want to delete this item?")) {
+                event.preventDefault();
+            }
+        }
+    </script>
+    <style>
+        /*
+        .checked {
+            color: orange;
+        }*/
+
+        .btn-danger {
+            opacity: 0.8;
+            padding: 3px 7px;
+            font-size: 13px;
+
+        }
+
+
+
+        .btn-warning {
+            opacity: 0.8;
+            padding: 3px 7px;
+            font-size: 13px;
+            background-color: lightgray;
+            border: solid 1px lightgray;
+        }
+
+        #log {
+            color: rgb(255, 255, 255);
+        }
+
+        #log:hover {
+            text-decoration: none;
+            color: rgb(128, 232, 243);
+        }
+
+        .description {
+            /* Add your custom styles here */
+            border: 1px solid #eeecec;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            border-radius: 10px;
+        }
+
+
+        .description::placeholder {
+            color: rgb(228, 227, 227);
+
+        }
+
+        .title {
+            /* Your custom styles for text, email, and password input fields */
+            border: 1px solid #eeecec;
+            /* Example: Add border */
+            padding: 5px;
+            /* Example: Add padding */
+            border-radius: 10px;
+            /* Example: Add rounded corners */
+            color: gray;
+
+        }
+
+        .title::placeholder {
+            color: rgb(228, 227, 227);
+        }
+
+        .form input {
+
+            border-radius: 10px;
+            border: 1px solid #eeecec;
+        }
+
+        .date {
+            color: rgb(182, 182, 182);
+        }
+
+
+        #avatarForm #submit {
+            color: blue;
+        }
+
+        .col-md-7 {
+            margin-left: 0px;
+            margin-right: 0px;
+            flex: 1;
+        }
+
+
+        @media (max-width:800px) {
+            .col-12 {
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+            .col-md-7 {
+
+                margin: 10px 0;
+            }
+
+        }
+
+        /*
+        #avatarForm input[type="file"]::-webkit-file-upload-button {
+                background-color: rgba(98, 137, 238, 0.979); /* change the color to your preference
+                border: none;
+                padding: 3px 8px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 13px;
+                color: white;
+        }
+
+        /* change NO file Chosen style
+        #avatarForm input[type="file"] {
+                font-size: 12px;
+
+        }*/
+
+        #customUploadBtn {
+            background-color: rgb(158, 182, 237);
+            /* change the color to your preference */
+            border: none;
+            padding: 7px 18px;
+            padding-top: 4px;
+            border-radius: 29px;
+            cursor: pointer;
+            font-size: 15px;
+            color: white;
+        }
+
+        #customUploadBtn:hover {
+            background-color: rgba(205, 136, 228, 0.979);
+        }
+
+        #sub {
+            background-color: rgb(158, 182, 237);
+            /* change the color to your preference */
+            border: solid 1px rgba(46, 71, 155, 0.526);
+            ;
+        }
+
+        #sub:hover {
+            background-color: rgba(205, 136, 228, 0.979);
+        }
+
+        #sec {
+            background-color: rgb(90, 117, 204);
+            padding-left: 35px;
+            padding-right: 40px;
+            padding-top: 15px;
+            margin-bottom: 0px;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .col-12 {
+            height: auto;
+            margin-top: 0%;
+            /*z-index: -1; The z-index property will place the .col-12 div behind the #sec div,*/
+            position: relative;
+            /*he position: relative property will allow the z-index property to work. */
+        }
+
+        #con {
+
+            height: 100vh;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .search-input {
+            flex-grow: 1;
+            /* Allows the input to grow and fill available space */
+            padding: 10px;
+            margin-right: 0px;
+            /* Adds some space between the input and the button */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .search-input:focus {
+            outline-color: #f0f0f0;
+            /* Removes the default focus style */
+            /*border-color: #064e9c; /* Sets a custom focus style */
+            outline-width: 0.05px;
+        }
+
+        .search-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Ensures the search bar looks good on smaller screens */
+        @media (max-width: 600px) {
+            .search-container {
+                flex-direction: column;
+            }
+
+            .search-input {
+                margin-right: 0;
+                margin-bottom: 10px;
+                /* Adds some space between the input and the button on small screens */
+            }
+        }
+
+        .fas {
+            color: black;
+        }
+
+        .fa-solid {
+            color: rgb(247, 204, 30);
+            transition: 0.5s;
+
+        }
+
+        .fa-solid.clicked {
+            transform: scale(3); /* Increase size by 20% when clicked */
+            color: #ff6600; /* Change color when clicked (optional) */
+        }
+
+        .fa-solid:hover {
+            transform: scale(0.84);
+        }
+
+
+
+        .fa-regular {
+            color: rgb(208, 208, 208); /* Or any color you prefer for the unimportant state */
+            transition: 0.5s;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div id="con">
+        <section id="sec">
+
+            <div style="display: flex; justify-content:space-between;">
+                <h2 style="color: white; font-size: 25px;">
+                    {% if user_profile.avatar %}
+                    <img src="{{ user_profile.avatar.url }}" alt="Avatar" id="avatar"
+                        style="width:50px;height:50px;border-radius:50%;cursor:pointer; border: solid 2px rgb(243, 106, 243); padding: 2px;">
+                    {% else %}
+                    <img src="{% static 'default_avatar.png' %}" alt="Avatar" id="avatar"
+                        style="width:50px;height:50px;border-radius:50%;cursor:pointer; border: solid 1px rgb(243, 106, 243); padding: 2px;">
+                    {% endif %}
+                    {{ request.user.username }}'s To Do
+                </h2>
+                <span style="margin-top: 10px;"><a id="log" href="{% url 'login' %}">Log out</a></span>
+            </div>
+            <form method="post" enctype="multipart/form-data" id="avatarForm" style="display:none;">
+                {% csrf_token %}
+                <!--{{ profile_form.avatar }}--><!--To hide the default avatar choose file button use the input field-->
+                <label></label>
+                <input type="file" name="avatar" id="id_avatar" style="display:none;">
+                <button type="button" id="customUploadBtn" class="btn btn-primary">Upload Picture</button>
+                {% buttons %}
+                <button type="submit" id="sub" class="btn btn-primary"
+                    style="border-radius: 29px; font-size: 15px; padding: 7px 18px; margin-top: 10px;">Save picture as
+                    profile</button>
+                {% endbuttons %}
+            </form>
+            <p style="color: white; padding-bottom: 20px;">🖸 Last login: {{ last_login }}</p>
+            <hr style="margin-bottom: 0px;">
+            <!--<h6 style="padding: 10px;">Your To do Items</h6>-->
+        </section>
+        <div class="row sectionBlockLayout" style=" margin: 0px;">
+            <div class="col-12" style=" display:flex;">
+                <div class="col-md-3 columnBlockLayout"
+                    style="padding:20px; border-radius: 0px; height:auto; background-color: rgb(246, 217, 252);">
+                    <section style="width: 70%;">
+                        <form method="POST" class="form">
+                            {% csrf_token %}
+                            {% bootstrap_form form %}
+                            {% buttons %}
+                            <button type="submit" class="btn btn-primary">{% if editing_item %}Save Changes{% else %}Add
+                                Item{% endif %}</button>
+                            {% endbuttons %}
+                        </form>
+                    </section>
+
+                </div>
+
+                <div class="col-md-7 columnBlockLayout"
+                    style=" padding:20px; border-radius: 0px; height:auto; background-color: rgb(246, 246, 246);">
+                    <div class="search-container" style="display: flex; align-items: center;">
+                        <form method="GET" action="{% url 'welcome' %}" class="search-container"
+                            style="display: flex; width: 100%;">
+                            <input type="text" name="search" class="search-input" placeholder="Search..."
+                                value="{{ search_query }}"
+                                style="flex-grow: 1; border: none; padding: 0.375rem 0.75rem;">
+                            <button type="submit" class="search-button"
+                                style="padding: 0.310rem 0.75rem; background-color: transparent;">
+                                <i class="fa fa-search" style="color: rgb(243, 106, 243); "></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    {% if search_query %}
+                    <h4>Search results for: "{{ search_query }}"</h4>
+                    {% endif %}
+
+                    <section class="to-do-list">
+                        {% for item in items %}
+                        <article class="todo-item">
+                            <div class="item-title">
+                                <!-- <i class="fa fa-star" onclick="markAsImportant(this, 'item-id')"></i> -->
+
+                                <i class="{% if item.important %}fa-solid{% else %}fa-regular{% endif %} fa-circle circle-icon"
+                                    data-item-id="{{ item.id }}" onclick="markAsImportant(this, '{{ item.id }}')" onclick="handleIconClick(this)"></i>
+                            </div>
+                            <h2><span style="font-size: 20px;"></span>{{ item.title }}</h2>
+                            <p>{{ item.description }}</p>
+                            <p>{{ item.due_date }}</p>
+                            <p>{{ item.completed|yesno:"Done,Not Done" }}</p>
+                            <a href="?item_id={{ item.id }}" class="btn btn-warning">Edit</a>
+                            <form method="POST" action="{% url 'delete_item' item.id %}" style="display: inline;"
+                                onsubmit="confirmDelete(event)">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                            <hr style="margin-right: 80%; border: 0.6px solid rgb(243, 242, 242);">
+                        </article>
+                        {% endfor %}
+                    </section>
+
+                    <section class="jump-titles">
+                        <span><b>Jump Titles:</b></span>
+                        {% for item in items %}
+                        <div>
+                            <span><a href="?item_id={{ item.id }}"> {{ item.title }}, </a></span>
+                        </div>
+                        {% endfor %}
+                    </section>
+
+                </div>
+                <div class="col-md-2 columnBlockLayout">
+                    <section class="important-items">
+                        <span><b>Important Items:</b></span>
+                        <ul id="important-items-list">
+                            {% for item in important_items %}
+                            <li data-item-id="{{ item.id }}">
+                                <b>{{ item.title }}</b>
+                                <!-- <i class="fa-circle circle-icon" data-item-id="{{ item.id }}"></i> -->
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </section>
+                </div>
+
+            </div>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+            <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script> -->
+            <script>
+                function handleIconClick(icon) {
+                    icon.classList.toggle('clicked');
+
+                    // If you want the effect to be temporary (e.g., for 1 second):
+                    /*
+                    setTimeout(() => {
+                        icon.classList.remove('clicked');
+                    }, 1000);
+                    */
+                }
+
+                // Mark item as important
+                function markAsImportant(icon, itemId) {
+                    var importance = icon.classList.contains('fa-solid') ? 'false' : 'true';
+
+
+                    $.ajax({
+                        url: `/update-importance/${itemId}/${importance}/`,
+                        type: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                if (importance === 'true') {
+                                    // $(icon).addClass('fa-star');
+                                    $(icon).removeClass('fa-regular').addClass('fa-solid'); // Make it a filled star
+
+                                    // Check if the item is already in the important items list
+                                    if ($(`#important-items-list li[data-item-id="${itemId}"]`).length === 0) {
+                                        $('#important-items-list').append(`<li data-item-id="${itemId}"><b>${$(icon).closest('.todo-item').find('h2').text()}</b>`);//<i class="fa-regular fa-circle" data-item-id="${itemId}"></i></li>`);
+                                    }
+                                } else {
+                                    // $(icon).removeClass('fa-star');
+                                    $(icon).removeClass('fa-solid').addClass('fa-regular'); // Make it an empty star
+                                    // $(icon).removeClass('fa-solid fa-star').addClass('fa-regular fa-star'); // Make it an empty star
+                                    // Remove item from the important items list
+                                    $(`#important-items-list li[data-item-id="${itemId}"]`).remove();
+
+                                }
+                            } else {
+                                console.error('Error:', data.error);
+                            }
+                        },
+                        error: function (error) {
+                            console.error('Error:', error);
+                        }
+                    });
+                }
+
+            </script>
+
+
+
+
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/v4-shims.min.js"></script>
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+                integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+                crossorigin="anonymous"></script>
+            <script>
+                document.getElementById('avatar').addEventListener('click', function () {
+                    document.getElementById('avatarForm').style.display = 'block';
+                });
+
+                document.getElementById('avatarForm').addEventListener('submit', function (event) {
+                    event.preventDefault();
+
+                    var form = new FormData(this);
+
+                    fetch("{% url 'welcome' %}", {
+                        method: 'POST',
+                        body: form,
+                        headers: {
+                            'X-CSRFToken': form.get('csrfmiddlewaretoken')
+                        }
+                    }).then(response => response.json()).then(data => {
+                        if (data.success) {
+                            document.getElementById('avatar').src = data.avatar_url;
+                            document.getElementById('avatarForm').style.display = 'none';
+                        } else {
+                            console.error('Error:', data.error);
+                        }
+                    }).catch(error => console.error('Error:', error));
+                });
+            </script>
+            <script>
+                document.getElementById('avatar').addEventListener('click', function () {
+                    document.getElementById('avatarForm').style.display = 'block';
+                });
+
+                document.getElementById('customUploadBtn').addEventListener('click', function () {
+                    document.getElementById('id_avatar').click();
+                });
+
+                document.getElementById('avatarForm').addEventListener('submit', function (event) {
+                    event.preventDefault();
+
+                    var form = new FormData(this);
+
+                    fetch("{% url 'welcome' %}", {
+                        method: 'POST',
+                        body: form,
+                        headers: {
+                            'X-CSRFToken': form.get('csrfmiddlewaretoken')
+                        }
+                    }).then(response => response.json()).then(data => {
+                        if (data.success) {
+                            document.getElementById('avatar').src = data.avatar_url;
+                            document.getElementById('avatarForm').style.display = 'none';
+                        } else {
+                            console.error('Error:', data.error);
+                        }
+                    }).catch(error => console.error('Error:', error));
+                });
+            </script>
+        </div>
+</body>
+
+</html>
